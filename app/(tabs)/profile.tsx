@@ -12,6 +12,29 @@ export default function ProfileScreen() {
   const colors = useColors();
   const [activeTab, setActiveTab] = useState<"posts" | "saved" | "achievements">("posts");
 
+  if (!currentUser) {
+    return (
+      <ScreenContainer edges={["top", "left", "right"]} className="justify-center">
+        <View className="items-center justify-center flex-1 px-6">
+          <Text className="text-2xl font-bold text-foreground mb-4">Not Logged In</Text>
+          <Text className="text-muted text-center mb-8">Please log in to view your profile</Text>
+          <Pressable
+            onPress={() => router.replace("/landing" as any)}
+            style={({ pressed }) => ({
+              backgroundColor: colors.primary,
+              paddingVertical: 12,
+              paddingHorizontal: 24,
+              borderRadius: 10,
+              opacity: pressed ? 0.8 : 1,
+            })}
+          >
+            <Text className="text-white font-semibold">Go to Login</Text>
+          </Pressable>
+        </View>
+      </ScreenContainer>
+    );
+  }
+
   const myPosts = posts.filter((p) => p.authorId === currentUser.id && !p.isDeleted);
   const savedPosts = posts.filter((p) => p.isSaved && !p.isDeleted);
 
