@@ -19,7 +19,6 @@ import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/_core/manus-runtime";
 import { StoreProvider } from "@/lib/store";
-import { AuthProvider } from "@/lib/auth-provider";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -79,29 +78,25 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <StoreProvider>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="landing" options={{ headerShown: false }} />
-                <Stack.Screen name="signup" options={{ headerShown: false }} />
-                <Stack.Screen name="reel/[reelId]" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="project/[projectId]" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="space/[spaceId]" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="event/[eventId]" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="create-post" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="search" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="notifications" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="settings" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="admin" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="projects" options={{ headerShown: false, presentation: "modal" }} />
-                <Stack.Screen name="friends" options={{ headerShown: false, presentation: "modal" }} />
-              </Stack>
-              <StatusBar style="auto" />
-            </StoreProvider>
-          </AuthProvider>
+          <StoreProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="landing" options={{ headerShown: false }} />
+              <Stack.Screen name="signup" options={{ headerShown: false }} />
+              <Stack.Screen name="reel/[reelId]" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="project/[projectId]" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="create-post" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="search" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="notifications" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="settings" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="admin" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="projects" options={{ headerShown: false, presentation: "modal" }} />
+              <Stack.Screen name="friends" options={{ headerShown: false, presentation: "modal" }} />
+            </Stack>
+            <StatusBar style="auto" />
+          </StoreProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </GestureHandlerRootView>

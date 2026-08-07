@@ -1,7 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
-import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 
 export default function LandingScreen() {
@@ -28,7 +27,7 @@ export default function LandingScreen() {
 
         {/* Login Button */}
         <Pressable
-          onPress={() => router.push("/login" as any)}
+          onPress={() => router.push("/(auth)/login" as any)}
           className="w-full mb-4"
           style={({ pressed }) => ({
             backgroundColor: colors.primary,
