@@ -3,14 +3,14 @@ import { View, Text, TextInput, Pressable, Alert, ScrollView, KeyboardAvoidingVi
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenContainer } from "@/components/screen-container";
-import { useStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth-store";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login } = useStore();
+  const { login } = useAuth();
   const colors = useColors();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,25 +33,13 @@ export default function LoginScreen() {
         // After successful login, replace with home to prevent going back
         router.replace("/(tabs)" as any);
       } else {
-        Alert.alert("Login Failed", "Invalid credentials or email not verified. Please register or check your email.");
+        Alert.alert("Login Failed", "Invalid email or password. Please try again.");
       }
-    } catch {
+    } catch (error) {
       Alert.alert("Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSignIn = async () => {
-    // Simulate Google sign-in with a demo account
-    setLoading(true);
-    const success = await login("rahul@college.edu", "password");
-    if (success) {
-      router.replace("/(tabs)");
-    } else {
-      Alert.alert("Error", "Google sign-in temporarily unavailable");
-    }
-    setLoading(false);
   };
 
   return (
@@ -184,42 +172,9 @@ export default function LoginScreen() {
               </Pressable>
             </Animated.View>
 
-            {/* Divider */}
-            <Animated.View 
-              entering={FadeInUp.delay(500).springify()}
-              className="flex-row items-center my-6"
-            >
-              <View className="flex-1 h-px" style={{ backgroundColor: colors.border }} />
-              <Text className="mx-4 text-sm text-muted-foreground">or</Text>
-              <View className="flex-1 h-px" style={{ backgroundColor: colors.border }} />
-            </Animated.View>
-
-            {/* Google Sign In */}
-            <Animated.View entering={FadeInUp.delay(550).springify()}>
-              <Pressable
-                onPress={handleGoogleSignIn}
-                disabled={loading}
-                style={({ pressed }) => ({
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: colors.surface,
-                  paddingVertical: 16,
-                  borderRadius: 16,
-                  borderWidth: 2,
-                  borderColor: colors.border,
-                  opacity: pressed || loading ? 0.8 : 1,
-                  transform: [{ scale: pressed ? 0.98 : 1 }],
-                })}
-              >
-                <Text className="text-lg mr-3">🔍</Text>
-                <Text className="text-foreground font-semibold">Continue with Google</Text>
-              </Pressable>
-            </Animated.View>
-
             {/* Register Link */}
             <Animated.View 
-              entering={FadeInUp.delay(600).springify()}
+              entering={FadeInUp.delay(500).springify()}
               className="items-center mt-6"
             >
               <Text className="text-muted-foreground text-sm mb-2">
@@ -235,11 +190,25 @@ export default function LoginScreen() {
 
             {/* Demo hint */}
             <Animated.View 
-              entering={FadeInUp.delay(700).springify()}
+              entering={FadeInUp.delay(600).springify()}
               className="mt-8 p-4 rounded-2xl"
               style={{ 
                 backgroundColor: colors.surface,
                 borderWidth: 1,
+                borderColor: colors.border,
+              }}
+            >
+              <View className="flex-row items-center mb-2">
+                <View 
+                  className="w-2 h-2 rounded-full mr-3"
+                  style={{ backgroundColor: colors.primary }}
+                />
+                <Text className="text-sm font-semibold text-foreground">Real Authentication</Text>
+              </View>
+              <Text className="text-xs text-muted-foreground">
+                Your login is now backed by a real database with secure password hashing
+              </Text>
+            </Animated.View>
                 borderColor: colors.border,
               }}
             >
