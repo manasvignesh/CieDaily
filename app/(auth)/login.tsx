@@ -28,12 +28,8 @@ export default function LoginScreen() {
     try {
       const success = await login(email, password);
       if (success) {
-        const domain = email.split("@")[1];
-        if (domain === "mlrit.ac.in") {
-          router.replace("/admin" as any);
-        } else {
-          router.replace("/(tabs)");
-        }
+        // After successful login, replace with home to prevent going back
+        router.replace("/(tabs)/home" as any);
       } else {
         Alert.alert("Login Failed", "Invalid credentials or email not verified. Please register or check your email.");
       }

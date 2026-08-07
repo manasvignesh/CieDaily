@@ -12,17 +12,6 @@ export default function ProfileScreen() {
   const colors = useColors();
   const [activeTab, setActiveTab] = useState<"posts" | "saved" | "achievements">("posts");
 
-  if (!currentUser) {
-    return (
-      <ScreenContainer edges={["top", "left", "right"]} className="justify-center">
-        <View className="items-center px-6">
-          <Text className="text-2xl font-bold text-foreground">Profile</Text>
-          <Text className="text-muted mt-2">Please log in to view your profile</Text>
-        </View>
-      </ScreenContainer>
-    );
-  }
-
   const myPosts = posts.filter((p) => p.authorId === currentUser.id && !p.isDeleted);
   const savedPosts = posts.filter((p) => p.isSaved && !p.isDeleted);
 
