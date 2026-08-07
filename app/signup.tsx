@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { View, Text, TextInput, Pressable, Alert, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TextInput, Pressable, Alert, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenContainer } from "@/components/screen-container";
 import { useStore } from "@/lib/store";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -38,7 +40,7 @@ export default function SignupScreen() {
       const success = await register(name, email, password);
       if (success) {
         // After successful signup, go to home
-        router.replace("/(tabs)/home" as any);
+        router.replace("/(tabs)" as any);
       } else {
         Alert.alert("Signup Failed", "Could not create account. Please try again.");
       }
@@ -57,20 +59,52 @@ export default function SignupScreen() {
       <ScreenContainer edges={["top", "left", "right"]}>
         <ScrollView contentContainerStyle={{ padding: 24 }} keyboardShouldPersistTaps="handled">
           <View className="flex-1">
-            <View className="items-center mb-8">
-              <View className="w-16 h-16 rounded-2xl bg-primary items-center justify-center mb-4">
-                <Text className="text-2xl font-bold text-white">CIE</Text>
-              </View>
-              <Text className="text-2xl font-bold text-foreground">Create Account</Text>
+            {/* Back Button */}
+            <Animated.View entering={FadeInDown.delay(100).springify()}>
+              <Pressable
+                onPress={() => router.back()}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.6 : 1,
+                  marginBottom: 20,
+                })}
+              >
+                <View className="flex-row items-center">
+                  <IconSymbol name="chevron.left" size={24} color={colors.primary} />
+                  <Text className="text-primary font-semibold ml-1">Back</Text>
+                </View>
+              </Pressable>
+            </Animated.View>
+
+            {/* Header with Logo */}
+            <Animated.View 
+              entering={FadeInDown.delay(200).springify()}
+              className="items-center mb-8"
+            >
+              <LinearGradient
+                colors={[colors.primary, "#6366f1"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.logoContainer}
+              >
+                <Text className="text-3xl font-bold text-white">CIE</Text>
+              </LinearGradient>
+              <Text className="text-3xl font-bold text-foreground mt-6">Create Account</Text>
               <Text className="text-muted mt-2 text-center">
                 Join the learning community
               </Text>
-            </View>
+            </Animated.View>
 
             {/* Name Input */}
-            <View className="mb-4">
+            <Animated.View entering={FadeInUp.delay(300).springify()} className="mb-4">
               <Text className="text-sm font-medium text-foreground mb-2">Full Name</Text>
-              <View className="flex-row items-center bg-surface border border-border rounded-xl px-4 py-3">
+              <View 
+                className="flex-row items-center rounded-xl px-4 py-4"
+                style={{ 
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
                 <IconSymbol name="person.fill" size={20} color={colors.muted} />
                 <TextInput
                   className="flex-1 ml-3 text-foreground text-base"
@@ -82,12 +116,19 @@ export default function SignupScreen() {
                   autoComplete="name"
                 />
               </View>
-            </View>
+            </Animated.View>
 
             {/* Email Input */}
-            <View className="mb-4">
+            <Animated.View entering={FadeInUp.delay(350).springify()} className="mb-4">
               <Text className="text-sm font-medium text-foreground mb-2">Email</Text>
-              <View className="flex-row items-center bg-surface border border-border rounded-xl px-4 py-3">
+              <View 
+                className="flex-row items-center rounded-xl px-4 py-4"
+                style={{ 
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
                 <IconSymbol name="envelope.fill" size={20} color={colors.muted} />
                 <TextInput
                   className="flex-1 ml-3 text-foreground text-base"
@@ -100,16 +141,23 @@ export default function SignupScreen() {
                   autoComplete="email"
                 />
               </View>
-            </View>
+            </Animated.View>
 
             {/* Password Input */}
-            <View className="mb-4">
+            <Animated.View entering={FadeInUp.delay(400).springify()} className="mb-4">
               <Text className="text-sm font-medium text-foreground mb-2">Password</Text>
-              <View className="flex-row items-center bg-surface border border-border rounded-xl px-4 py-3">
+              <View 
+                className="flex-row items-center rounded-xl px-4 py-4"
+                style={{ 
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
                 <IconSymbol name="lock.fill" size={20} color={colors.muted} />
                 <TextInput
                   className="flex-1 ml-3 text-foreground text-base"
-                  placeholder="Create a password"
+                  placeholder="Create a password (min 6 chars)"
                   placeholderTextColor={colors.muted}
                   value={password}
                   onChangeText={setPassword}
@@ -117,12 +165,19 @@ export default function SignupScreen() {
                   autoComplete="password"
                 />
               </View>
-            </View>
+            </Animated.View>
 
             {/* Confirm Password Input */}
-            <View className="mb-6">
+            <Animated.View entering={FadeInUp.delay(450).springify()} className="mb-6">
               <Text className="text-sm font-medium text-foreground mb-2">Confirm Password</Text>
-              <View className="flex-row items-center bg-surface border border-border rounded-xl px-4 py-3">
+              <View 
+                className="flex-row items-center rounded-xl px-4 py-4"
+                style={{ 
+                  backgroundColor: colors.surface,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}
+              >
                 <IconSymbol name="lock.fill" size={20} color={colors.muted} />
                 <TextInput
                   className="flex-1 ml-3 text-foreground text-base"
@@ -134,43 +189,74 @@ export default function SignupScreen() {
                   autoComplete="password"
                 />
               </View>
-            </View>
+            </Animated.View>
 
             {/* Signup Button */}
-            <Pressable
-              onPress={handleSignup}
-              disabled={loading}
-              style={({ pressed }) => ({
-                backgroundColor: colors.primary,
-                paddingVertical: 14,
-                borderRadius: 12,
-                alignItems: "center",
-                opacity: pressed ? 0.8 : 1,
-                transform: [{ scale: pressed ? 0.97 : 1 }],
-              })}
-            >
-              <Text className="text-white font-semibold text-base">
-                {loading ? "Creating Account..." : "Create Account"}
-              </Text>
-            </Pressable>
+            <Animated.View entering={FadeInUp.delay(500).springify()}>
+              <Pressable
+                onPress={handleSignup}
+                disabled={loading}
+                style={({ pressed }) => [
+                  styles.signupButton,
+                  {
+                    backgroundColor: colors.primary,
+                    opacity: pressed || loading ? 0.8 : 1,
+                    transform: [{ scale: pressed ? 0.98 : 1 }],
+                  },
+                ]}
+              >
+                <Text className="text-white font-bold text-lg">
+                  {loading ? "Creating Account..." : "Create Account"}
+                </Text>
+              </Pressable>
+            </Animated.View>
 
             {/* Login Link */}
-            <View className="items-center mt-6">
-              <Text className="text-muted text-sm">
-                Already have an account?{" "}
-                <Text className="text-primary font-semibold">Log In</Text>
+            <Animated.View 
+              entering={FadeInUp.delay(600).springify()}
+              className="items-center mt-6"
+            >
+              <Text className="text-muted-foreground text-sm mb-2">
+                Already have an account?
               </Text>
               <Pressable
-                onPress={() => router.push("/login" as any)}
-                className="mt-1"
-                style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+                onPress={() => router.push("/(auth)/login" as any)}
+                style={({ pressed }) => ({ 
+                  opacity: pressed ? 0.6 : 1,
+                })}
               >
-                <Text className="text-primary font-semibold text-sm">Go to Login</Text>
+                <Text className="text-primary font-bold text-base">Log In</Text>
               </Pressable>
-            </View>
+            </Animated.View>
           </View>
         </ScrollView>
       </ScreenContainer>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#3b82f6",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  signupButton: {
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#3b82f6",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+});
