@@ -1,11 +1,20 @@
 import { View, Text, Pressable } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useEffect } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
+import { useStore } from "@/lib/store";
 
 export default function LandingScreen() {
   const router = useRouter();
   const colors = useColors();
+  const { currentUser } = useStore();
+
+  // If user is already logged in, redirect to home
+  useEffect(() => {
+    if (currentUser) {
+      router.replace("/(tabs)/home" as any);
+    }
+  }, [currentUser, router]);
 
   return (
     <ScreenContainer edges={["top", "left", "right"]} className="justify-center px-6">

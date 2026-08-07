@@ -2,7 +2,7 @@ import { Tabs, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 import { useStore } from "@/lib/store";
 import { useEffect } from "react";
@@ -15,15 +15,21 @@ export default function TabLayout() {
   const bottomPadding = Platform.OS === "web" ? 12 : Math.max(insets.bottom, 8);
   const tabBarHeight = 56 + bottomPadding;
 
-  // Redirect to landing if not authenticated
+  // Use a flag to avoid navigation during initial render
   useEffect(() => {
+    // Only redirect if not authenticated
     if (!currentUser) {
-      router.replace("/landing" as any);
+      // Use a small delay to ensure router is ready
+      const timer = setTimeout(() => {
+        router.replace("/landing" as any);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [currentUser, router]);
 
+  // Show blank view while redirecting
   if (!currentUser) {
-    return null;
+    return <View style={{ flex: 1 }} />;
   }
 
   return (
