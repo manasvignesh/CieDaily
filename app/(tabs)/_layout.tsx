@@ -4,32 +4,32 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Platform, View } from "react-native";
 import { useColors } from "@/hooks/use-colors";
-import { useStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth-store";
 import { useEffect } from "react";
 
 export default function TabLayout() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { currentUser } = useStore();
+  const { currentUser, isLoading } = useAuth();
   const bottomPadding = Platform.OS === "web" ? 12 : Math.max(insets.bottom, 8);
   const tabBarHeight = 56 + bottomPadding;
 
   // Use a flag to avoid navigation during initial render
   useEffect(() => {
-    // Only redirect if not authenticated
-    if (!currentUser) {
+    // Only redirect if not authenticated and not loading
+    if (!isLoading && !currentUser) {
       // Use a small delay to ensure router is ready
       const timer = setTimeout(() => {
         router.replace("/landing" as any);
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [currentUser, router]);
+  }, [currentUser, isLoading, router]);
 
-  // Show blank view while redirecting
-  if (!currentUser) {
-    return <View style={{ flex: 1 }} />;
+  // Show blank view while loading or redirecting
+  if (isLoading || !currentUser) {
+    return <View style={{ flex: 1, backgroundColor: colors.background }} />;
   }
 
   return (

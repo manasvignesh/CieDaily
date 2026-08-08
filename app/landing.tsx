@@ -4,18 +4,18 @@ import { useEffect } from "react";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
-import { useStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth-store";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function LandingScreen() {
   const router = useRouter();
   const colors = useColors();
-  const { currentUser } = useStore();
+  const { currentUser } = useAuth();
 
   // If user is already logged in, redirect to home
   useEffect(() => {
     if (currentUser) {
-      router.replace("/(tabs)/home" as any);
+      router.replace("/(tabs)" as any);
     }
   }, [currentUser, router]);
 

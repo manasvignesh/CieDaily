@@ -3,14 +3,14 @@ import { View, Text, TextInput, Pressable, Alert, ScrollView, KeyboardAvoidingVi
 import { useRouter } from "expo-router";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { ScreenContainer } from "@/components/screen-container";
-import { useStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth-store";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { useColors } from "@/hooks/use-colors";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function SignupScreen() {
   const router = useRouter();
-  const { register } = useStore();
+  const { register } = useAuth();
   const colors = useColors();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,9 +42,9 @@ export default function SignupScreen() {
         // After successful signup, go to home
         router.replace("/(tabs)" as any);
       } else {
-        Alert.alert("Signup Failed", "Could not create account. Please try again.");
+        Alert.alert("Signup Failed", "Could not create account. Email may already be in use.");
       }
-    } catch {
+    } catch (error) {
       Alert.alert("Error", "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
